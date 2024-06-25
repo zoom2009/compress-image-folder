@@ -17,7 +17,13 @@ const processFile = async (inputFilePath, outputFilePath) => {
   // Allow resizing only for specific file types
   const allowedExtensions = ['.webp', '.jpg', '.jpeg', '.png'];
   if (!allowedExtensions.includes(fileExtension)) {
-    console.log(`Ignored: ${inputFilePath}`);
+    // Copy the file without processing if it's not an allowed extension
+    try {
+      await fs.copy(inputFilePath, outputFilePath);
+      console.log(`Copied without processing: ${inputFilePath}`);
+    } catch (err) {
+      console.error(`Error copying file ${inputFilePath}:`, err);
+    }
     return;
   }
 
